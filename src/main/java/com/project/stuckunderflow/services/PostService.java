@@ -1,29 +1,47 @@
 package com.project.stuckunderflow.services;
 
+import com.project.stuckunderflow.entities.Like;
 import com.project.stuckunderflow.entities.Post;
 import com.project.stuckunderflow.entities.User;
+import com.project.stuckunderflow.repos.LikeRepository;
 import com.project.stuckunderflow.repos.PostRepository;
 import com.project.stuckunderflow.requests.PostCreateRequest;
 import com.project.stuckunderflow.requests.PostUpdateRequest;
+import com.project.stuckunderflow.responses.LikeResponse;
+import com.project.stuckunderflow.responses.PostResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
 
     private PostRepository postRepository;
     private UserService userService;
+    private LikeService likeService;
 
-    public PostService(PostRepository postRepository, UserService userService) {
+    public PostService(PostRepository postRepository, UserService userService,LikeService likeService) {
         this.postRepository = postRepository;
         this.userService = userService;
+        this.likeService = likeService;
     }
-    public List<Post> getAllPosts(Optional<Long> userId) {
-        if(userId.isPresent())
-            return postRepository.findByUserId(userId.get());
-        return postRepository.findAll();
+    @Autowired
+    public void setLikeService(LikeService likeService){
+        this.likeService = likeService;
+    }
+    public List<PostResponse> getAllPosts(Optional<Long> userId) {
+        List<Post> list;
+        if(userId.isPresent()){
+            list = postRepository.findByUserId(userId.get());
+        } else {
+            list = postRepository.findAll();
+        }
+        return list.stream().map(p -> {
+            List<LikeResponse> likes = likeService.getAllLikesWithParam(Optional.empty(), Optional.of(p.getId()));
+            return new PostResponse(p, likes);}).collect(Collectors.toList());
     }
 
     public Post getOnePostById(Long postId) {

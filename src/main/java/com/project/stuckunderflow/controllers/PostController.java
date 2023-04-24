@@ -3,6 +3,7 @@ package com.project.stuckunderflow.controllers;
 import com.project.stuckunderflow.entities.Post;
 import com.project.stuckunderflow.requests.PostCreateRequest;
 import com.project.stuckunderflow.requests.PostUpdateRequest;
+import com.project.stuckunderflow.responses.PostResponse;
 import com.project.stuckunderflow.services.PostService;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,7 @@ public class PostController {
         this.postService = postService;
     }
     @GetMapping
-    public List<Post> getAllPost(@RequestParam Optional<Long> userId){
+    public List<PostResponse> getAllPost(@RequestParam Optional<Long> userId){
         return postService.getAllPosts(userId);
     }
     @GetMapping("/{postId}")

@@ -20,8 +20,7 @@ public class LikeService {
     private UserService userService;
     private PostService postService;
 
-    public LikeService(LikeRepository likeRepository, UserService userService,
-                       PostService postService) {
+    public LikeService(LikeRepository likeRepository, UserService userService, PostService postService) {
         this.likeRepository = likeRepository;
         this.userService = userService;
         this.postService = postService;
