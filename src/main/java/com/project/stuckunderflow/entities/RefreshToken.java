@@ -5,31 +5,28 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 @Entity
-@Table(name="comment")
+@Table(name = "refresh_token")
 @Data
-public class Comment {
-
+public class RefreshToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="post_id",nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
-    Post post;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id",nullable = false)
+    @JoinColumn(name = "user_id",nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     User user;
-    @Lob
-    @Column(columnDefinition="text")
-    String text;
 
+    @Column(nullable = false,unique = true)
+    String token;
+
+    @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    Date createDate;
+    Date expiryDate;
 }

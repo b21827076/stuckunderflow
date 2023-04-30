@@ -10,12 +10,11 @@ import lombok.Setter;
 @Entity
 @Table(name="user")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String type;
     String userName;
     String password;
-
+    int avatar;
 }

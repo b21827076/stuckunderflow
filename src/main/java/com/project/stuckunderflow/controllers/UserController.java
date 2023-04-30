@@ -1,17 +1,14 @@
 package com.project.stuckunderflow.controllers;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
+import com.project.stuckunderflow.exceptions.UserNotFoundException;
+import com.project.stuckunderflow.responses.UserResponse;
 import com.project.stuckunderflow.services.UserService;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import com.project.stuckunderflow.entities.User;
 import com.project.stuckunderflow.repos.UserRepository;
 
@@ -36,9 +33,12 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public User getOneUser(@PathVariable Long userId) {
-        //custom exception
-        return userService.getOneUserById(userId);
+    public UserResponse getOneUser(@PathVariable Long userId) {
+        User user = userService.getOneUserById(userId);
+        if(user == null){
+            throw new UserNotFoundException();
+        }
+        return new UserResponse(user);
 
     }
 
@@ -52,6 +52,15 @@ public class UserController {
         userService.deleteById(userId);
     }
 
+    @GetMapping("/activity/{UserId}")
+    public List<Object> getUserActivity(@PathVariable Long userId){
+        return userService.getUserActivity(userId);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    private void handleUserNotFound(){
+    }
 }
 
 
