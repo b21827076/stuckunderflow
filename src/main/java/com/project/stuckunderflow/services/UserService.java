@@ -1,7 +1,5 @@
 package com.project.stuckunderflow.services;
 
-import com.project.stuckunderflow.entities.Comment;
-import com.project.stuckunderflow.entities.Like;
 import com.project.stuckunderflow.entities.User;
 import com.project.stuckunderflow.repos.CommentRepository;
 import com.project.stuckunderflow.repos.LikeRepository;

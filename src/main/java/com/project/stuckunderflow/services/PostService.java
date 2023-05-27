@@ -1,15 +1,14 @@
 package com.project.stuckunderflow.services;
 
-import com.project.stuckunderflow.entities.Like;
 import com.project.stuckunderflow.entities.Post;
 import com.project.stuckunderflow.entities.User;
-import com.project.stuckunderflow.repos.LikeRepository;
 import com.project.stuckunderflow.repos.PostRepository;
 import com.project.stuckunderflow.requests.PostCreateRequest;
 import com.project.stuckunderflow.requests.PostUpdateRequest;
 import com.project.stuckunderflow.responses.LikeResponse;
 import com.project.stuckunderflow.responses.PostResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -24,15 +23,16 @@ public class PostService {
     private UserService userService;
     private LikeService likeService;
 
-    public PostService(PostRepository postRepository, UserService userService,LikeService likeService) {
+    public PostService(PostRepository postRepository, UserService userService) {
         this.postRepository = postRepository;
         this.userService = userService;
-        this.likeService = likeService;
     }
+
     @Autowired
     public void setLikeService(LikeService likeService){
         this.likeService = likeService;
     }
+
     public List<PostResponse> getAllPosts(Optional<Long> userId) {
         List<Post> list;
         if(userId.isPresent()){

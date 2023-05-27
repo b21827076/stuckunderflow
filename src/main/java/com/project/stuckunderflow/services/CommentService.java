@@ -7,19 +7,17 @@ import com.project.stuckunderflow.repos.CommentRepository;
 import com.project.stuckunderflow.requests.CommentCreateRequest;
 import com.project.stuckunderflow.requests.CommentUpdateRequest;
 import com.project.stuckunderflow.responses.CommentResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Component
-@EnableAutoConfiguration
+@Service
 public class CommentService {
-    @Autowired
+
     private CommentRepository commentRepository;
     private UserService userService;
     private PostService postService;

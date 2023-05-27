@@ -1,16 +1,25 @@
 package com.project.stuckunderflow.controllers;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.project.stuckunderflow.exceptions.UserNotFoundException;
 import com.project.stuckunderflow.responses.UserResponse;
 import com.project.stuckunderflow.services.UserService;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
 import com.project.stuckunderflow.entities.User;
-import com.project.stuckunderflow.repos.UserRepository;
+
 
 @RestController
 @RequestMapping("/users")
@@ -23,13 +32,16 @@ public class UserController {
     };
 
     @GetMapping
-    public List<User> getAllUser(){
-        return userService.getAllUsers();
+    public List<UserResponse> getAllUsers(){
+        return userService.getAllUsers().stream().map(UserResponse::new).toList();
     }
 
     @PostMapping
-    public User createUser(@RequestBody User newUser) {
-        return userService.saveOneUser(newUser);
+    public ResponseEntity<Void> createUser(@RequestBody User newUser) {
+        User user = userService.saveOneUser(newUser);
+        if(user != null)
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @GetMapping("/{userId}")
@@ -43,10 +55,13 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    public User updateOneUser(@PathVariable Long userId,@RequestBody User newUser) {
-        return userService.updateOneUser(userId,newUser);
-    }
+    public ResponseEntity<Void> updateOneUser(@PathVariable Long userId, @RequestBody User newUser) {
+        User user = userService.updateOneUser(userId, newUser);
+        if(user != null)
+            return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
+    }
     @DeleteMapping("/{userId}")
     public void deleteOneUser(@PathVariable Long userId) {
         userService.deleteById(userId);

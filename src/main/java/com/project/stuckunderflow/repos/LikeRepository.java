@@ -1,6 +1,5 @@
 package com.project.stuckunderflow.repos;
 
-import com.project.stuckunderflow.entities.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.project.stuckunderflow.entities.Like;

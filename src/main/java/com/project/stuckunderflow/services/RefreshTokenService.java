@@ -4,15 +4,18 @@ import com.project.stuckunderflow.entities.RefreshToken;
 import com.project.stuckunderflow.entities.User;
 import com.project.stuckunderflow.repos.RefreshTokenRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
 
+@Service
 public class RefreshTokenService {
     @Value("${refresh.token.expires.in}")
     Long expireSeconds;
-    private final RefreshTokenRepository refreshTokenRepository;
+
+    private RefreshTokenRepository refreshTokenRepository;
 
     public RefreshTokenService(RefreshTokenRepository refreshTokenRepository){
         this.refreshTokenRepository = refreshTokenRepository;
