@@ -12,7 +12,7 @@ import java.util.UUID;
 public class RefreshTokenService {
     @Value("${refresh.token.expires.in}")
     Long expireSeconds;
-    private RefreshTokenRepository refreshTokenRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public RefreshTokenService(RefreshTokenRepository refreshTokenRepository){
         this.refreshTokenRepository = refreshTokenRepository;

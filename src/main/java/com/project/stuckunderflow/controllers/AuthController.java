@@ -23,9 +23,8 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
     private JwtTokenProvider jwtTokenProvider;
     private UserService userService;
-    private PasswordEncoder passwordEncoder;
     private RefreshTokenService refreshTokenService;
-
+    private PasswordEncoder passwordEncoder;
     public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserService userService,
                           PasswordEncoder passwordEncoder, RefreshTokenService refreshTokenService) {
         this.authenticationManager = authenticationManager;
@@ -41,7 +40,7 @@ public class AuthController {
         Authentication auth = authenticationManager.authenticate(authToken);
         SecurityContextHolder.getContext().setAuthentication(auth);
         String jwtToken = jwtTokenProvider.generateJwtToken(auth);
-        User user = UserService.getOneUserByUserName(loginRequest.getUserName());
+        User user = userService.getOneUserByUserName(loginRequest.getUserName());
         AuthResponse authResponse = new AuthResponse();
         authResponse.setAccessToken("Bearer "+jwtToken);
         authResponse.setAccessToken(refreshTokenService.createRefreshToken(user));
@@ -61,7 +60,7 @@ public class AuthController {
             user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
             userService.saveOneUser(user);
 
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(registerRequest);
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(registerRequest.getUserName(),registerRequest.getPassword());
             Authentication auth = authenticationManager.authenticate(authToken);
             SecurityContextHolder.getContext().setAuthentication(auth);
             String jwtToken = jwtTokenProvider.generateJwtToken(auth);

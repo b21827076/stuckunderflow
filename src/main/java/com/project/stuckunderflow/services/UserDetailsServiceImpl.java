@@ -3,6 +3,7 @@ package com.project.stuckunderflow.services;
 import com.project.stuckunderflow.entities.User;
 import com.project.stuckunderflow.repos.UserRepository;
 import com.project.stuckunderflow.security.JwtUserDetails;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
